@@ -2,23 +2,24 @@ from django.db import models
 from django.contrib.auth.models import User
 
 TYPES = (
-    ("nor", "normal"),
-    ("fig", "fighting"),
-    ("fly", "flying"),
-    ("gro", "ground"),
-    ("roc", "rock"),
-    ("bug", "bug"),
-    ("gho", "ghost"),
-    ("ste", "steel"),
-    ("fir", "fire"),
-    ("wat", "water"),
-    ("gra", "grass"),
-    ("ele", "electric"),
-    ("psy", "psychic"),
-    ("ice", "ice"),
-    ("dra", "dragon"),
-    ("fai", "fairy"),
-    ("dar", "dark"),
+    ("nor", "Normal"),
+    ("fig", "Fighting"),
+    ("fly", "Flying"),
+    ("gro", "Ground"),
+    ("roc", "Rock"),
+    ("bug", "Bug"),
+    ("gho", "Ghost"),
+    ("ste", "Steel"),
+    ("fir", "Fire"),
+    ("wat", "Water"),
+    ("gra", "Grass"),
+    ("ele", "Electric"),
+    ("psy", "Psychic"),
+    ("ice", "Ice"),
+    ("dra", "Dragon"),
+    ("fai", "Fairy"),
+    ("dar", "Dark"),
+    ("poi", "Poison"),
 )
 
 TEAMS = (
@@ -38,8 +39,8 @@ class Pokemon(models.Model):
     image = models.ImageField(null=True)
     image_shiny = models.ImageField(null=True)
     fast_attack = models.ForeignKey("FastAttack", on_delete=models.DO_NOTHING, null=True)
-    charged_attack = models.ForeignKey("ChargedAttack", on_delete=models.DO_NOTHING, null=True, related_name="primary_attack")
-    second_charged_attack = models.ForeignKey("ChargedAttack", on_delete=models.DO_NOTHING, null=True, related_name="secondary_attack")
+    charged_attack = models.ForeignKey("ChargedAttack", on_delete=models.DO_NOTHING, null=True,
+                                       related_name="primary_attack")
 
 
 class FastAttack(models.Model):
@@ -66,7 +67,8 @@ class TrainerPokemon(models.Model):
     pokemon = models.ForeignKey("Pokemon", on_delete=models.CASCADE)
     nickname = models.CharField(max_length=32, blank=True, null=True)
     is_shiny = models.BooleanField()
-
-
-
-
+    fast_attack = models.ForeignKey("FastAttack", on_delete=models.DO_NOTHING, null=True)
+    charged_attack = models.ForeignKey("ChargedAttack", on_delete=models.DO_NOTHING, null=True,
+                                       related_name="charged_attack")
+    second_charged_attack = models.ForeignKey("ChargedAttack", on_delete=models.DO_NOTHING, null=True,
+                                              related_name="alternative_attack")
