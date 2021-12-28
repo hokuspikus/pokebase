@@ -9,6 +9,16 @@ def calculate_fast_attack_damage(attacker, defender):
     return damage
 
 
+def calculate_charged_attack_damage(attacker, defender):
+    if defender.second_type is None:
+        damage = attacker.charged_attack.power * DAMAGE_CHART[f"{attacker.charged_attack.get_type_display()}"] \
+        [f"{defender.get_type_display()}"]
+    else:
+        damage = attacker.charged_attack.power * DAMAGE_CHART[f"{attacker.charged_attack.get_type_display()}"] \
+        [f"{defender.get_type_display()}"] * DAMAGE_CHART[f"{attacker.charged_attack.get_type_display()}"] \
+        [f"{defender.get_second_type_display()}"]
+    return damage
+
 DAMAGE_CHART = {
     "Bug": {
         "Bug": 1.0,
