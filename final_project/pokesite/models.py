@@ -66,7 +66,7 @@ class TrainerPokemon(models.Model):
     trainer = models.ForeignKey("Trainer", on_delete=models.CASCADE)
     pokemon = models.ForeignKey("Pokemon", on_delete=models.CASCADE)
     nickname = models.CharField(max_length=32, blank=True, null=True)
-    is_shiny = models.BooleanField()
+    is_shiny = models.BooleanField(default=False)
     fast_attack = models.ForeignKey("FastAttack", on_delete=models.DO_NOTHING, null=True)
     charged_attack = models.ForeignKey("ChargedAttack", on_delete=models.DO_NOTHING, null=True,
                                        related_name="charged_attack")

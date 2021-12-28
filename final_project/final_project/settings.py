@@ -121,6 +121,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 try:
     from final_project.local_settings import DATABASES
 except ModuleNotFoundError:
-    print("Brak konfiguracji bazy danych w pliku local_settings.py!")
-    print("Uzupełnij dane i spróbuj ponownie!")
+    print("No configuration of database in local_settings.py!")
+    print("Please provide such file and try again")
     exit(0)
