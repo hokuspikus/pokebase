@@ -42,6 +42,9 @@ class Pokemon(models.Model):
     charged_attack = models.ForeignKey("ChargedAttack", on_delete=models.DO_NOTHING, null=True,
                                        related_name="primary_attack")
 
+    def __str__(self):
+        return f"{self.name} #{self.pokedex_number}"
+
 
 class FastAttack(models.Model):
     name = models.CharField(max_length=32, unique=True)
