@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Profile - {{ trainer.name }}{% endblock %}
+{% block content %}
+    <h4>Name: {{ trainer.name }}</h4>
+    <h4>Team: {{ trainer.get_team_display }}</h4>
+    <h5>Owned Pokemon:</h5>
+    <ul>
+    {% for pokemon in trainer.pokemon.all %}
+        <li>pokemon</li>
+    {% empty %}
+        <p>You have no owned Pokemon yet!</p>
+    {% endfor %}
+    </ul>
+    <p>Choose desired type:</p>
+        <form method="post">
+        {% csrf_token %}
+        <select name="type" id="type">
+            <option disabled selected value>Pick primary type</option>
+            {% for type in types %}
+          <option value="{{ type.0 }}">{{ type.1 }}</option>
+            {% endfor %}
+        </select>
+        <select name="second_type" id="second_type">
+            <option disabled selected value>Pick secondary type</option>
+            {% for type in types %}
+          <option value="{{ type.0 }}">{{ type.1 }}</option>
+            {% endfor %}
+        </select>
+            <button type="submit">Filter</button>
+        </form>
+           <p>Type: {{ get_chosen_display }} {{ get_second_chosen_display }}</p>
+            {% for poke in filtered %}
+                {{ poke }}<br>
+    {% empty %}
+    {% endfor %}
+{% endblock %}

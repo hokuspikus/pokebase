@@ -38,9 +38,10 @@ class Pokemon(models.Model):
     evolves_from = models.ForeignKey("Pokemon", on_delete=models.CASCADE, null=True)
     image = models.ImageField(null=True)
     image_shiny = models.ImageField(null=True)
-    fast_attack = models.ForeignKey("FastAttack", on_delete=models.DO_NOTHING, null=True)
+    fast_attack = models.ForeignKey("FastAttack", on_delete=models.DO_NOTHING, null=True,
+                                    related_name="default_primary")
     charged_attack = models.ForeignKey("ChargedAttack", on_delete=models.DO_NOTHING, null=True,
-                                       related_name="primary_attack")
+                                       related_name="default_secondary")
 
     def __str__(self):
         return f"{self.name} #{self.pokedex_number}"
@@ -71,7 +72,6 @@ class TrainerPokemon(models.Model):
     nickname = models.CharField(max_length=32, blank=True, null=True)
     is_shiny = models.BooleanField(default=False)
     fast_attack = models.ForeignKey("FastAttack", on_delete=models.DO_NOTHING, null=True)
-    charged_attack = models.ForeignKey("ChargedAttack", on_delete=models.DO_NOTHING, null=True,
-                                       related_name="charged_attack")
+    charged_attack = models.ForeignKey("ChargedAttack", on_delete=models.DO_NOTHING, null=True, related_name="default")
     second_charged_attack = models.ForeignKey("ChargedAttack", on_delete=models.DO_NOTHING, null=True,
-                                              related_name="alternative_attack")
+                                              related_name="optional")

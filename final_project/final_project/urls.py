@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from pokesite.views import BaseShowcase
+from pokesite.views import BaseShowcase, TrainerAdd
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', BaseShowcase.as_view(), name="main_page"),
+    path('trainer/<int:trainer_id>/', TrainerAdd.as_view(), name="main_page"),
 ]
