@@ -23,10 +23,10 @@ class TrainerAdd(View):
     def post(self, request, trainer_id):
         poke_type = request.POST.get('type')
         poke_second_type = request.POST.get('second_type')
+        trainer = Trainer.objects.get(id=trainer_id)
+        types = TYPES
         if poke_second_type == "":
-            trainer = Trainer.objects.get(id=trainer_id)
-            types = TYPES
-            filtered_pokemon = Pokemon.objects.filter(Q(type=poke_type) &
+            filtered_pokemon = Pokemon.objects.filter(Q(type=poke_type) |
                                                       Q(second_type=poke_type)).order_by('pokedex_number')
             ctx = {
                 "trainer": trainer,
@@ -34,12 +34,16 @@ class TrainerAdd(View):
                 "types": types,
                 "chosen": poke_type
             }
+        elif poke_type == "":
+            filtered_pokemon = Pokemon.objects.filter(Q(type=poke_second_type) | Q(second_type=poke_second_type)).order_by('pokedex_number')
+            ctx = {
+                "trainer": trainer,
+                "filtered": filtered_pokemon,
+                "types": types,
+                "chosen": poke_second_type
+            }
         else:
-            trainer = Trainer.objects.get(id=trainer_id)
-            types = TYPES
-            filtered_pokemon = Pokemon.objects.filter(Q(type=poke_type) & Q(second_type=poke_second_type) |
-                                                      Q(type=poke_second_type) & Q(second_type=poke_type)).order_by(
-                                                      'pokedex_number'),
+            filtered_pokemon = Pokemon.objects.filter(Q(type=poke_type, second_type=poke_second_type) | Q(type=poke_second_type, second_type=poke_type)).order_by('pokedex_number')
             ctx = {
                 "trainer": trainer,
                 "filtered": filtered_pokemon,

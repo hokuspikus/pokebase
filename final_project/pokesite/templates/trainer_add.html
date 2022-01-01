@@ -15,13 +15,13 @@
         <form method="post">
         {% csrf_token %}
         <select name="type" id="type">
-            <option disabled selected value>Pick primary type</option>
+            <option value="">Pick primary type</option>
             {% for type in types %}
           <option value="{{ type.0 }}">{{ type.1 }}</option>
             {% endfor %}
         </select>
         <select name="second_type" id="second_type">
-            <option disabled selected value>Pick secondary type</option>
+            <option value="">Pick secondary type</option>
             {% for type in types %}
           <option value="{{ type.0 }}">{{ type.1 }}</option>
             {% endfor %}
@@ -31,6 +31,6 @@
            <p>Type: {{ get_chosen_display }} {{ get_second_chosen_display }}</p>
             {% for poke in filtered %}
                 {{ poke }}<br>
-    {% empty %}
-    {% endfor %}
+            {% empty %}
+            {% endfor %}
 {% endblock %}
