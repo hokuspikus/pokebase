@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Profile - {{ trainer.name }}{% endblock %}
 {% block content %}
-    <div class="container-lg">
+    <div>
     <h4>Name: {{ trainer.name }}</h4>
     <h4>Team: {{ trainer.get_team_display }}</h4>
     <h5>Owned Pokemon:</h5>
@@ -31,16 +31,62 @@
         </form>
            <p>Type: {{ get_chosen_display }} {{ get_second_chosen_display }}</p>
     </div>
+        <!--SectionORI: Products v.3-->
+      <section class="text-center mb-4">
+
+        <!--Grid row-->
+        <div class="row wow fadeIn">
+          {% for pokemon in filtered %}
+
+          <!--Grid column-->
+          <div class="col-lg-3 col-md-6 mb-4">
+
+            <!--Card-->
+            <div class="card">
+
+              <!--Card image-->
+              <div class="view overlay">
+                {% if pokemon.image %}
+                <img src="{{ MEDIA_URL }}{{ pokemon.image.url }}"style='display:block; height: 100%; width: 100%' class="card-img-top" alt="">
+                {% endif %}
+                  <div class="mask rgba-white-slight"></div>
+              </div>
+              <!--Card image-->
+              <!--Card content-->
+              <div class="card-body text-center">
+                <!--Category & Title-->
+                  <h5><span class="badge-pill">{{ pokemon.get_type_display}}</span></h5>
+                    {% if pokemon.second_type %}
+                  <h5><span class="badge-pill">{{ pokemon.get_second_type_display}}</span></h5>
+                    {% endif %}
+                <h5>
+                  <strong>
+                    {{ pokemon }}
+                  </strong>
+                </h5>
+              </div>
+              <!--Card content-->
+            </div>
+            <!--Card-->
+          </div>
+          <!--Grid column-->
+
+          {% endfor %}
+        </div>
+
+      </section>
+    <!--
     <div class="container-xl">
         <section class="pokedex">
             <ul>
-            {% for poke in filtered %}
-                <li>
-                {{ poke }}
-                </li>
-            {% empty %}
-            {% endfor %}
+{#            {% for poke in filtered %}#}
+{#                <li>#}
+{#                {{ poke }}#}
+{#                </li>#}
+{#            {% empty %}#}
+{#            {% endfor %}#}
             </ul>
         </section>
     </div>
+    -->
 {% endblock %}
