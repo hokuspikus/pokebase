@@ -52,11 +52,17 @@ class FastAttack(models.Model):
     type = models.CharField(max_length=4, choices=TYPES)
     power = models.IntegerField()
 
+    def __str__(self):
+        return f"{self.name}, Power: {self.power}, Type: {self.type}"
+
 
 class ChargedAttack(models.Model):
     name = models.CharField(max_length=32, unique=True)
     type = models.CharField(max_length=4, choices=TYPES)
     power = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.name}, Power: {self.power}, Type: {self.type}"
 
 
 class Trainer(models.Model):
