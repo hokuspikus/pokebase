@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ pokemon }} details{% endblock %}
+{% block content %}
+<h5>Name: {{ pokemon.name }}</h5>
+<h5>Pokedex number: #{{ pokemon.pokedex_number }}</h5>
+<h5>Type: {{ pokemon.get_type_display }}</h5>
+    {% if pokemon.second_type %}
+<h5>Second type: {{ pokemon.get_second_type_display }}</h5>
+    {% endif %}
+<h5>Fast moves: {% for attack in fast_attacks %}
+            {{ attack }}<br>
+                {% endfor %}
+</h5>
+<h5>Charged moves: {% for attack in charged_attacks %}
+            {{ attack }}<br>
+                {% endfor %}
+</h5>
+{% endblock %}

@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.shortcuts import render
 from django.views import View
 from pokesite.models import Trainer, Pokemon, TYPES
-# Create your views here.
+from pokesite.management.commands._private import default_attacks
 
 
 class BaseShowcase(View):
@@ -52,3 +52,19 @@ class TrainerAdd(View):
                 "second_chosen": poke_second_type
             }
         return render(request, "trainer_add.html", ctx)
+
+
+class PokemonDetails(View):
+    def get(self, request, pokemon_name):
+        pokemon = Pokemon.objects.get(name__iexact=pokemon_name)
+        fast_attacks = []
+        charged_attacks = []
+        for item in default_attacks:
+            if item['pokemon_id'] == pokemon.pokedex_number:
+                for attack in item['fast_moves']:
+                    if attack not in fast_attacks:
+                        fast_attacks.append(attack)
+                for attack in item['charged_moves']:
+                    if attack not in charged_attacks:
+                        charged_attacks.append(attack)
+        return render(request, "pokemon_details.html", {"pokemon": pokemon, "fast_attacks": fast_attacks, "charged_attacks": charged_attacks})
