@@ -7,5 +7,5 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         populate_pokedex_semimanually()
-        populate_pokedex(pokemon[:854])
+        populate_pokedex(pokemon[:853])
         self.stdout.write(self.style.SUCCESS("Pokedex entries complete"))

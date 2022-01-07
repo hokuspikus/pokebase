@@ -144,3 +144,10 @@ def set_default_attacks_to_manually_entered_pokemon():
     change_attacks_to_pokemon(711, "Seed Bomb", "Hex")
     change_attacks_to_pokemon(720, "Shadow Ball", "Confusion")
 
+
+def set_images():
+    for i in range(1, 721):
+        poke = Pokemon.objects.get(pokedex_number=i)
+        poke.image = f'images/{i}.png'
+        poke.save()
+

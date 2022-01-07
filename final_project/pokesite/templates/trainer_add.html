@@ -39,25 +39,23 @@
           {% for pokemon in filtered %}
 
           <!--Grid column-->
-          <div class="col-lg-3 col-md-6 mb-4">
-
+          <div class="col-lg-2 col-md-6 mb-4">
+            <a href={% url 'pokemon_details' pokemon.name %} style="color:black;text-decoration:none;">
             <!--Card-->
             <div class="card">
 
               <!--Card image-->
               <div class="view overlay">
-                {% if pokemon.image %}
-                <img src="{{ MEDIA_URL }}{{ pokemon.image.url }}"style='display:block; height: 100%; width: 100%' class="card-img-top" alt="">
-                {% endif %}
+                <img src="{{ MEDIA_URL }}{{ pokemon.image.url }}" style='display:block; height: 100%; width: 100%' class="card-img-top" alt="">
                   <div class="mask rgba-white-slight"></div>
               </div>
               <!--Card image-->
               <!--Card content-->
               <div class="card-body text-center">
                 <!--Category & Title-->
-                  <h5><span class="badge-pill">{{ pokemon.get_type_display}}</span></h5>
+                  <span class="badge badge-pill bg-primary">{{ pokemon.get_type_display}}</span>
                     {% if pokemon.second_type %}
-                  <h5><span class="badge-pill">{{ pokemon.get_second_type_display}}</span></h5>
+                 <span class="badge badge-pill bg-primary">{{ pokemon.get_second_type_display}}</span>
                     {% endif %}
                 <h5>
                   <strong>
@@ -68,6 +66,7 @@
               <!--Card content-->
             </div>
             <!--Card-->
+            </a>
           </div>
           <!--Grid column-->
 
