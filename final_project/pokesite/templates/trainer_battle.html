@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Battle outcome{% endblock %}
+{% block content %}
+          <div>
+    <h4>Name: {{ trainer.name }}</h4>
+    <h4>Team: {{ trainer.get_team_display }}</h4>
+    <h5>Owned Pokemon:</h5>
+    <ul>
+    {% for pokemon in trainer.pokemon.all %}
+        <li>{{ pokemon }}</li>
+    {% empty %}
+        <p>You have no owned Pokemon yet!</p>
+    {% endfor %}
+    </ul>
+      <h4>You are about to battle {{ battle.name }}!</h4>
+      <span class="badge badge-pill bg-primary">{{ battle.get_type_display}}</span>
+                    {% if battle.second_type %}
+                 <span class="badge badge-pill bg-primary">{{ battle.get_second_type_display}}</span>
+                    {% endif %}
+    <p>Choose desired mode:</p>
+
+           <form method="post">
+        {% csrf_token %}
+        <select name="mode" id="mode">
+            <option value="balanced">Balanced</option>
+            <option value="defensive">Defensive</option>
+            <option value="offensive">Offensive</option>
+        </select>
+               <button type="submit">Prepare for battle</button>
+           </form>
+        </div>
+        <!--SectionORI: Products v.3-->
+      <section class="text-center mb-4">
+
+        <!--Grid row-->
+        <div class="row wow fadeIn">
+          {% for pokemon in suggestion %}
+
+          <!--Grid column-->
+          <div class="col-lg-2 col-md-6 mb-4">
+            <!--<a href={% url 'pokemon_details' pokemon.0.name %} style="color:black;text-decoration:none;"> -->
+            <!--Card-->
+            <div class="card">
+
+              <!--Card image-->
+              <div class="view overlay">
+                <img src="{{ MEDIA_URL }}{{ pokemon.0.image.url }}" style='display:block; height: 100%; width: 100%' class="card-img-top" alt="">
+                  <div class="mask rgba-white-slight"></div>
+              </div>
+              <!--Card image-->
+              <!--Card content-->
+              <div class="card-body text-center">
+                <!--Category & Title-->
+                  <span class="badge badge-pill bg-primary">{{ pokemon.0.get_type_display}}</span>
+                    {% if pokemon.0.second_type %}
+                 <span class="badge badge-pill bg-primary">{{ pokemon.0.get_second_type_display}}</span>
+                    {% endif %}
+                <h5>
+                  <strong>
+                    {{ pokemon.0 }}
+                  </strong>
+                </h5>
+              </div>
+              <!--Card content-->
+            </div>
+            <!--Card-->
+            </a>
+          </div>
+          <!--Grid column-->
+    {% endfor %}
+        </div>
+
+      </section>
+
+{% endblock %}

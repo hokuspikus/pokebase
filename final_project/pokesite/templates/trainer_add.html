@@ -7,7 +7,7 @@
     <h5>Owned Pokemon:</h5>
     <ul>
     {% for pokemon in trainer.pokemon.all %}
-        <li>pokemon</li>
+        <li>{{ pokemon }}</li>
     {% empty %}
         <p>You have no owned Pokemon yet!</p>
     {% endfor %}

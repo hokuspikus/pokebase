@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.shortcuts import render
 from django.views import View
 from pokesite.models import Trainer, Pokemon, TYPES
-from pokesite.current_moves import current_moves
+from pokesite.constant import current_moves, full_off, full_def, balanced
 
 
 class BaseShowcase(View):
@@ -11,8 +11,8 @@ class BaseShowcase(View):
 
 
 class TrainerAdd(View):
-    def get(self, request, trainer_id):
-        trainer = Trainer.objects.get(id=trainer_id)
+    def get(self, request, trainer_name):
+        trainer = Trainer.objects.get(name__iexact=trainer_name)
         types = TYPES
         ctx = {
             "trainer": trainer,
@@ -20,10 +20,10 @@ class TrainerAdd(View):
         }
         return render(request, "trainer_add.html", ctx)
 
-    def post(self, request, trainer_id):
+    def post(self, request, trainer_name):
         poke_type = request.POST.get('type')
         poke_second_type = request.POST.get('second_type')
-        trainer = Trainer.objects.get(id=trainer_id)
+        trainer = Trainer.objects.get(name__iexact=trainer_name)
         types = TYPES
         if poke_second_type == "":
             filtered_pokemon = Pokemon.objects.filter(Q(type=poke_type) |
@@ -68,3 +68,55 @@ class PokemonDetails(View):
                     if attack not in charged_attacks:
                         charged_attacks.append(attack)
         return render(request, "pokemon_details.html", {"pokemon": pokemon, "fast_attacks": fast_attacks, "charged_attacks": charged_attacks})
+
+
+class PokemonBattleDetails(View):
+    def get(self, request, pokemon_name, trainer_name):
+        battle_pokemon = Pokemon.objects.get(name__iexact=pokemon_name)
+        trainer = Trainer.objects.get(name__iexact=trainer_name)
+        ctx = {"trainer": trainer, "battle": battle_pokemon}
+        return render(request, "trainer_battle_details.html", ctx)
+
+    def post(self, request, pokemon_name, trainer_name):
+        battle_pokemon = Pokemon.objects.get(name__iexact=pokemon_name)
+        trainer = Trainer.objects.get(name__iexact=trainer_name)
+        mode = request.POST.get("mode")
+        ctx = {"trainer": trainer, "battle": battle_pokemon}
+        if mode == "offensive":
+            suggestion_offensive = full_off(trainer.pokemon.all(), battle_pokemon)
+            ctx["suggestion"] = suggestion_offensive
+            return render(request, "trainer_battle_details.html", ctx)
+        if mode == "defensive":
+            suggestion_defensive = full_def(trainer.pokemon.all(), battle_pokemon)
+            ctx["suggestion"] = suggestion_defensive
+            return render(request, "trainer_battle_details.html", ctx)
+        if mode == "balanced":
+            suggestion_balanced = balanced(trainer.pokemon.all(), battle_pokemon)
+            ctx["suggestion"] = suggestion_balanced
+            return render(request, "trainer_battle_details.html", ctx)
+
+
+class PokemonBattle(View):
+    def get(self, request, pokemon_name, trainer_name):
+        battle_pokemon = Pokemon.objects.get(name__iexact=pokemon_name)
+        trainer = Trainer.objects.get(name__iexact=trainer_name)
+        ctx = {"trainer": trainer, "battle": battle_pokemon}
+        return render(request, "trainer_battle.html", ctx)
+
+    def post(self, request, pokemon_name, trainer_name):
+        battle_pokemon = Pokemon.objects.get(name__iexact=pokemon_name)
+        trainer = Trainer.objects.get(name__iexact=trainer_name)
+        mode = request.POST.get("mode")
+        ctx = {"trainer": trainer, "battle": battle_pokemon}
+        if mode == "offensive":
+            suggestion_offensive = full_off(trainer.pokemon.all(), battle_pokemon)
+            ctx["suggestion"] = suggestion_offensive
+            return render(request, "trainer_battle.html", ctx)
+        if mode == "defensive":
+            suggestion_defensive = full_def(trainer.pokemon.all(), battle_pokemon)
+            ctx["suggestion"] = suggestion_defensive
+            return render(request, "trainer_battle.html", ctx)
+        if mode == "balanced":
+            suggestion_balanced = balanced(trainer.pokemon.all(), battle_pokemon)
+            ctx["suggestion"] = suggestion_balanced
+            return render(request, "trainer_battle.html", ctx)
