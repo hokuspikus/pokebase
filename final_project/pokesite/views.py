@@ -120,3 +120,20 @@ class PokemonBattle(View):
             suggestion_balanced = balanced(trainer.pokemon.all(), battle_pokemon)
             ctx["suggestion"] = suggestion_balanced
             return render(request, "trainer_battle.html", ctx)
+
+
+class ChooseBattle(View):
+    def get(self, request, trainer_name):
+        trainer = Trainer.objects.get(name__iexact=trainer_name)
+        ctx = {"trainer": trainer}
+        return render(request, "choose_battle.html", ctx)
+
+    def post(self, request, trainer_name):
+        trainer = Trainer.objects.get(name__iexact=trainer_name)
+        to_search = request.POST.get("name")
+        if to_search.isdigit():
+            filtered = Pokemon.objects.filter(pokedex_number__contains=to_search).order_by('pokedex_number')
+        else:
+            filtered = Pokemon.objects.filter(name__icontains=to_search).order_by('pokedex_number')
+        ctx = {"trainer": trainer, "filtered": filtered}
+        return render(request, "choose_battle.html", ctx)

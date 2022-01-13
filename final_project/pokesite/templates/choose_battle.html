@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Profile - {{ trainer.name }}{% endblock %}
+{% block content %}
+    <div>
+    <h4>Name: {{ trainer.name }}</h4>
+    <h4>Team: {{ trainer.get_team_display }}</h4>
+    <h5>Owned Pokemon:</h5>
+    <ul>
+    {% for pokemon in trainer.pokemon.all %}
+        <li>{{ pokemon }}</li>
+    {% empty %}
+        <p>You have no owned Pokemon yet!</p>
+    {% endfor %}
+    </ul>
+    </div>
+    <p>Choose desired type:</p>
+        <form method="post">
+        {% csrf_token %}
+            <label for="name">Enter part of name or Pokedex number</label>
+        <input type="text" id="name" name="name">
+            <button type="submit">Filter</button>
+    </form>
+
+         <!--SectionORI: Products v.3-->
+      <section class="text-center mb-4">
+
+        <!--Grid row-->
+        <div class="row wow fadeIn">
+          {% for pokemon in filtered %}
+
+          <!--Grid column-->
+          <div class="col-lg-2 col-md-6 mb-4">
+            <a href={% url 'pokemon_battle' trainer.name pokemon.name %} style="color:black;text-decoration:none;">
+            <!--Card-->
+            <div class="card">
+
+              <!--Card image-->
+              <div class="view overlay">
+                <img src="{{ MEDIA_URL }}{{ pokemon.image.url }}" style='display:block; height: 100%; width: 100%' class="card-img-top" alt="">
+                  <div class="mask rgba-white-slight"></div>
+              </div>
+              <!--Card image-->
+              <!--Card content-->
+              <div class="card-body text-center">
+                <!--Category & Title-->
+                  <span class="badge badge-pill bg-primary">{{ pokemon.get_type_display}}</span>
+                    {% if pokemon.second_type %}
+                 <span class="badge badge-pill bg-primary">{{ pokemon.get_second_type_display}}</span>
+                    {% endif %}
+                <h5>
+                  <strong>
+                    {{ pokemon }}
+                  </strong>
+                </h5>
+              </div>
+              <!--Card content-->
+            </div>
+            <!--Card-->
+            </a>
+          </div>
+          <!--Grid column-->
+
+          {% endfor %}
+        </div>
+
+      </section>
+    {% endblock %}
