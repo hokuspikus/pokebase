@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.shortcuts import render
 from django.views import View
 from pokesite.models import Trainer, Pokemon, TYPES
-from pokesite.constant import current_moves, full_off, full_def, balanced
+from pokesite.constant import CURRENT_MOVES, full_off, full_def, balanced
 
 
 class BaseShowcase(View):
@@ -59,7 +59,7 @@ class PokemonDetails(View):
         pokemon = Pokemon.objects.get(name__iexact=pokemon_name)
         fast_attacks = []
         charged_attacks = []
-        for item in current_moves:
+        for item in CURRENT_MOVES:
             if item['pokemon_id'] == pokemon.pokedex_number:
                 for attack in item['fast_moves']:
                     if attack not in fast_attacks:

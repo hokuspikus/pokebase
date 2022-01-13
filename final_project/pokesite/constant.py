@@ -1,4 +1,5 @@
 def calculate_fast_attack_damage(attacker, defender):
+    """Takes attacker's fast attack and calculates damage based on one or two types od the defender"""
     if defender.second_type is None:
         damage = attacker.fast_attack.power * DAMAGE_CHART[f"{attacker.fast_attack.get_type_display()}"] \
         [f"{defender.get_type_display()}"]
@@ -10,6 +11,7 @@ def calculate_fast_attack_damage(attacker, defender):
 
 
 def calculate_charged_attack_damage(attacker, defender):
+    """Takes attacker's charged attack and calculates damage based on one or two types od the defender"""
     if defender.second_type is None:
         damage = attacker.charged_attack.power * DAMAGE_CHART[f"{attacker.charged_attack.get_type_display()}"] \
         [f"{defender.get_type_display()}"]
@@ -19,49 +21,56 @@ def calculate_charged_attack_damage(attacker, defender):
         [f"{defender.get_second_type_display()}"]
     return damage
 
-
-def calculate_second_charged_attack_damage(attacker, defender):
-    if defender.second_type is None:
-        damage = attacker.second_charged_attack.power * DAMAGE_CHART[f"{attacker.second_charged_attack.get_type_display()}"] \
-        [f"{defender.get_type_display()}"]
-    else:
-        damage = attacker.second_charged_attack.power * DAMAGE_CHART[f"{attacker.second_charged_attack.get_type_display()}"] \
-        [f"{defender.get_type_display()}"] * DAMAGE_CHART[f"{attacker.second_charged_attack.get_type_display()}"] \
-        [f"{defender.get_second_type_display()}"]
-    return damage
+# NOT USED BY NOW, TO BE IMPLEMENTED IN THE FUTURE
+# def calculate_second_charged_attack_damage(attacker, defender):
+#     if defender.second_type is None:
+#         damage = attacker.second_charged_attack.power * DAMAGE_CHART[f"{attacker.second_charged_attack.get_type_display()}"] \
+#         [f"{defender.get_type_display()}"]
+#     else:
+#         damage = attacker.second_charged_attack.power * DAMAGE_CHART[f"{attacker.second_charged_attack.get_type_display()}"] \
+#         [f"{defender.get_type_display()}"] * DAMAGE_CHART[f"{attacker.second_charged_attack.get_type_display()}"] \
+#         [f"{defender.get_second_type_display()}"]
+#     return damage
 
 
 def calculate_fast_stab(attacker, damage):
-    if attacker.type is attacker.fast_attack.type or attacker.second_type is attacker.fast_attack.type:
+    """Takes into consideration if fast attack damage should be multiplied because of Same Type Attack Bonus (STAB)"""
+    if attacker.type == attacker.fast_attack.type or attacker.second_type == attacker.fast_attack.type:
         return damage * 1.25
     else:
         return damage
 
 
 def calculate_charged_stab(attacker, damage):
-    if attacker.type is attacker.charged_attack.type or attacker.second_type is attacker.charged_attack.type:
+    """Takes into consideration if charged attack damage should be multiplied because of Same Type Attack Bonus (STAB)"""
+    if attacker.type == attacker.charged_attack.type or attacker.second_type == attacker.charged_attack.type:
         return damage * 1.25
     else:
         return damage
 
-
-def calculate_second_charged_stab(attacker, damage):
-    if attacker.type is attacker.second_charged_attack.type or attacker.second_type is attacker.second_charged_attack.type:
-        return damage * 1.25
-    else:
-        return damage
+# NOT USED BY NOW, TO BE IMPLEMENTED IN THE FUTURE
+# def calculate_second_charged_stab(attacker, damage):
+#     if attacker.type is attacker.second_charged_attack.type or attacker.second_type is attacker.second_charged_attack.type:
+#         return damage * 1.25
+#     else:
+#         return damage
 
 
 def calculate_dps(attacker, defender):
+    """Calculates damage per second based on types of attacker and defender, attacks of attacker.
+    To simplify for now it multiplies by pseudotime variables alfa and beta"""
     alfa = 1.2
     beta = 0.2
     fast_dps = calculate_fast_attack_damage(attacker, defender)
     charged_dps = calculate_charged_attack_damage(attacker, defender)
-    final_dps = fast_dps * alfa + charged_dps * beta
+    final_fast_dps = calculate_fast_stab(attacker, fast_dps)
+    final_charged_dps = calculate_charged_stab(attacker, charged_dps)
+    final_dps = final_fast_dps * alfa + final_charged_dps * beta
     return final_dps
 
 
 def full_off(trainer, defender):
+    """Makes a list of owned Pokemon ordered by pure offensive power"""
     dps_list = []
     for poke in trainer:
         dps = calculate_dps(poke, defender)
@@ -72,6 +81,7 @@ def full_off(trainer, defender):
 
 
 def full_def(trainer, defender):
+    """Makes a list of owned Pokemon ordered by pure defensive power"""
     def_dps_list = []
     for poke in trainer:
         dps = calculate_dps(poke, defender)
@@ -82,14 +92,17 @@ def full_def(trainer, defender):
 
 
 def balanced(trainer, defender):
+    """Makes a list of owned Pokemon ordered by both offensive and defensive value, where higher is better"""
     balanced_dps = []
     for poke in trainer:
         dps = calculate_dps(poke, defender)
         def_dps = calculate_dps(defender, poke)
-        balanced_score = def_dps/dps
+        balanced_score = dps/def_dps
         balanced_dps.append((poke, dps, def_dps, balanced_score))
-    balanced_dps.sort(key=lambda a: a[3])
+    balanced_dps.sort(key=lambda a: a[3], reverse=True)
     return balanced_dps
+
+# Damage chart as dictionary of dictionaries, used by several functions in the app
 
 
 DAMAGE_CHART = {
@@ -454,8 +467,8 @@ DAMAGE_CHART = {
         "Water": 0.625
     }
 }
-
-current_moves = [
+# list of current moves possible to have by Pokemon
+CURRENT_MOVES = [
     {
         "charged_moves": [
             "Sludge Bomb",
