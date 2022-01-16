@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.shortcuts import render
 from django.views import View
 from pokesite.models import Trainer, Pokemon, TYPES
-from pokesite.constant import CURRENT_MOVES, full_off, full_def, balanced
+from pokesite.constant import CURRENT_MOVES, full_off, full_def, balanced, calculate_damage_effectiveness
 
 
 class BaseShowcase(View):
@@ -59,6 +59,22 @@ class PokemonDetails(View):
         pokemon = Pokemon.objects.get(name__iexact=pokemon_name)
         fast_attacks = []
         charged_attacks = []
+        type_effectiveness = []
+        for type in TYPES:
+            type_effectiveness.append((calculate_damage_effectiveness(type[1], pokemon), type[1]))
+        very_resistant = []
+        resistant = []
+        weak = []
+        very_weak = []
+        for type in type_effectiveness:
+            if type[0] < 0.4:
+                very_resistant.append(type[1])
+            elif 0.4 <= type[0] < 1:
+                resistant.append(type[1])
+            elif 1 < type[0] < 2:
+                weak.append(type[1])
+            elif type[0] >= 2:
+                very_weak.append(type[1])
         for item in CURRENT_MOVES:
             if item['pokemon_id'] == pokemon.pokedex_number:
                 for attack in item['fast_moves']:
@@ -67,7 +83,8 @@ class PokemonDetails(View):
                 for attack in item['charged_moves']:
                     if attack not in charged_attacks:
                         charged_attacks.append(attack)
-        return render(request, "pokemon_details.html", {"pokemon": pokemon, "fast_attacks": fast_attacks, "charged_attacks": charged_attacks})
+        return render(request, "pokemon_details.html", {"pokemon": pokemon, "fast_attacks": fast_attacks, "charged_attacks": charged_attacks,
+                                                        "very_weak": very_weak, "weak": weak, "resistant": resistant, "very_resistant": very_resistant})
 
 
 class PokemonBattleDetails(View):

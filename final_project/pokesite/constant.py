@@ -1,3 +1,13 @@
+def calculate_damage_effectiveness(type, defender):
+    """It calculates pure multiplier of the type against defending Pokemon"""
+    if defender.second_type is None:
+        multiplier = DAMAGE_CHART[type][f"{defender.get_type_display()}"]
+    else:
+        multiplier = DAMAGE_CHART[type][f"{defender.get_type_display()}"] * DAMAGE_CHART[type][f"{defender.get_second_type_display()}"]
+    result = round(multiplier, 3)
+    return result
+
+
 def calculate_fast_attack_damage(attacker, defender):
     """Takes attacker's fast attack and calculates damage based on one or two types od the defender"""
     if defender.second_type is None:
