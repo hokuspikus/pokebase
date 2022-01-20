@@ -1,5 +1,5 @@
 ###Simple site to help Pokemon trainers with theory-crafting
-####but more importantly to let me pass my final test :)
+####but also to let me pass my final test :-)
 
 ###Technologies used:
 + Python 3.9
@@ -17,3 +17,5 @@ For populating Database please use following commands after migrations in this s
 + python3 manage.py setdefaultattacks
 
 These work thank to wonderful https://pogoapi.net/documentation/ site!
+
+###The site will not be abandoned after passing the test ;-)

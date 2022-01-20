@@ -154,3 +154,8 @@ class ChooseBattle(View):
             filtered = Pokemon.objects.filter(name__icontains=to_search).order_by('pokedex_number')
         ctx = {"trainer": trainer, "filtered": filtered}
         return render(request, "choose_battle.html", ctx)
+
+
+class ToBeDone(View):
+    def get(self, request):
+        return render(request, "to_be_done.html")
