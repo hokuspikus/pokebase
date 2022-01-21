@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from pokesite.views import BaseShowcase, TrainerAdd, PokemonDetails, PokemonBattle, PokemonBattleDetails, ChooseBattle, ToBeDone
+from pokesite.views import BaseShowcase, TrainerAdd, PokemonDetails, PokemonBattle, PokemonBattleDetails, ChooseBattle, ToBeDone, \
+                            SignUp, Login, CreateTrainer, Pokedex
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -27,7 +28,11 @@ urlpatterns = [
     path('trainer/<trainer_name>/battle/', ChooseBattle.as_view(), name="choose_battle"),
     path('trainer/<trainer_name>/battle/<pokemon_name>/details/', PokemonBattleDetails.as_view(), name="pokemon_battle_details"),
     path('trainer/<trainer_name>/battle/<pokemon_name>/', PokemonBattle.as_view(), name="pokemon_battle"),
+    path('pokedex', Pokedex.as_view(), name="pokedex"),
     path('not-available-yet/', ToBeDone.as_view(), name="to_be_done"),
+    path('register/', SignUp.as_view(), name="registration"),
+    path('login/', Login.as_view(), name="login"),
+    path('create-trainer/', CreateTrainer.as_view(), name="create_trainer"),
 
 ]
 

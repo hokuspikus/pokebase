@@ -19,7 +19,7 @@
     {% if very_resistant %}
     <h5>This Pokemon is very resistant to:</h5>
         {% for type in very_resistant %}
-    <span class="badge badge-pill bg-primary">{{ type }}</span>
+    <span class="badge badge-pill bg-success">{{ type }}</span>
         {% endfor %}
     {% endif %}
     {% if resistant %}
@@ -31,13 +31,13 @@
     {% if weak %}
     <h5>This Pokemon is weak to:</h5>
         {% for type in weak %}
-    <span class="badge badge-pill bg-primary">{{ type }}</span>
+    <span class="badge badge-pill bg-warning">{{ type }}</span>
         {% endfor %}
     {% endif %}
     {% if very_weak %}
     <h5>This Pokemon is very weak to:</h5>
         {% for type in very_weak %}
-    <span class="badge badge-pill bg-primary">{{ type }}</span>
+    <span class="badge badge-pill bg-danger">{{ type }}</span>
         {% endfor %}
     {% endif %}
 {% endblock %}

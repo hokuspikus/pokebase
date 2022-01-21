@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Register yourself!{% endblock %}
+{% block content %}
+    {% if not message %}
+    Please provide the information:
+    <form method="post">
+        {% csrf_token %}
+        {{ user_form.as_p }}
+        <button type="submit">Register</button>
+    </form>
+    {% endif %}
+    {{ message }}<br>
+    {% if message %}
+        <a href={% url 'login'%}>You can now log in</a>
+    {% endif %}
+{% endblock %}
